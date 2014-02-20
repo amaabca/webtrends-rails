@@ -34,11 +34,14 @@ NOTE: Any options that can be passed to before_action can be used as options.
 
 By default the track hook will use the following tags:
 
-- dcsuri
-- dcsdat
-- dcssip
-- WT.es
-- WT.co_f
+- dcsuri: request path (ex. /path/to/service)
+- dcsdat: milliseconds since epoch
+- dcssip: hostname
+- WT.es: hostname + dcsuri
+- WT.co_f: webtrends visitor id
+
+NOTE: dcsuri is the only mandatory tag for event tracking. If dcsuri is not passed you will get
+a 400 Bad Request response
 
 #### Tracking with custom tags
 
