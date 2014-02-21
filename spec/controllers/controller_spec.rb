@@ -3,34 +3,32 @@ describe TestsController do
     Webtrends::Event.stub(:track)
   end
 
-  context 'successfull load' do
-    context '#analytics visitor id' do
-      it 'should respond to method' do
-        expect(subject).to receive(:analytics_visitor_id)
+  describe '.analytics_visitor_id' do
+    it 'will be called when a tracked action occurs' do
+      expect(subject).to receive(:analytics_visitor_id)
+      get :index
+    end
+
+    context 'webtrends client cookie is present' do
+      it 'will return the visitor id' do
+        request.cookies['WT_FPC'] = 'id=some_id-9ew8r09t7:x=vlkhrpe-ryg8u4387'
         get :index
-      end
-
-      context 'cookie is present' do
-        it 'should return the id' do
-          request.cookies['WT_FPC'] = 'id=some_id-9ew8r09t7:vlkhrpe-ryg8u4387'
-          get :index
-          expect(subject.model.webtrends_tags['WT.co_f']).to eq('some_id-9ew8r09t7')
-        end
-      end
-
-      context 'cookies is not present' do
-        it 'should return empty string' do
-          get :index
-          expect(subject.model.webtrends_tags['WT.co_f']).to eq('')
-        end
+        expect(subject.model.webtrends_tags['WT.co_f']).to eq('some_id-9ew8r09t7')
       end
     end
 
-    context '#analytics_tags' do
-      it 'should return tags' do
+    context 'webtrends client cookie is not present' do
+      it 'will return an empty string' do
         get :index
-        expect(subject.model.webtrends_tags).to_not be_empty
+        expect(subject.model.webtrends_tags['WT.co_f']).to eq('')
       end
+    end
+  end
+
+  context '#analytics_tags' do
+    it 'returns default analytics tags' do
+      get :index
+      expect(subject.model.webtrends_tags).to_not be_empty
     end
   end
 end
