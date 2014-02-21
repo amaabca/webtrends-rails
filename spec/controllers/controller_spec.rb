@@ -25,7 +25,7 @@ describe TestsController do
     end
   end
 
-  context '#analytics_tags' do
+  context '.analytics_tags' do
     it 'returns default analytics tags' do
       get :index
       expect(subject.model.webtrends_tags).to_not be_empty
